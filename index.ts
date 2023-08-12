@@ -1,4 +1,4 @@
-import type { AstroConfig, AstroIntegration, GetStaticPathsResult, Props } from "astro";
+import type { AstroIntegration } from "astro";
 
 export interface FlareDocsOptions {
 	components: {
@@ -15,7 +15,7 @@ export default function flareDocsIntegration(): AstroIntegration {
 
 				injectRoute({
 					pattern: "/docs/[...path]",
-					entryPoint: "./flareDocs/pages/[...path].astro"
+					entryPoint: "@vl07/flare-docs/src/pages/[...path].astro"
 				})
 			}
 		}

@@ -4,7 +4,7 @@ import type { DocPage, DocPageProps, Sidebar, SidebarItem } from "../types"
 import SidebarItemComponent from "../components/SidebarItemComponent.astro"
 
 export const getStaticPaths: GetStaticPaths = async () => {
-	const pages = await Astro.glob<DocPage>("../../src/content/docs/**/*.md")
+	const pages = await Astro.glob<DocPage>("../../../../../src/content/docs/**/*.md")
 	
 	const sidebar: Sidebar = {}
 
