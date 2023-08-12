@@ -1,0 +1,28 @@
+---
+import type { SidebarItem } from "../types"
+interface Props {
+	sidebar: SidebarItem,
+	match: string[]
+}
+const { sidebar, match } = Astro.props
+
+const isMatch = match[0] === sidebar.lastPath
+console.log(match, sidebar.lastPath, isMatch)
+if (isMatch) {
+	match.shift()
+} 
+
+---
+
+<li>
+	<a href={ sidebar.path === "" ? "/docs/" : "/docs/" + sidebar.path } class={`${isMatch ? "match" : ""}`}>{ sidebar.title }</a>
+	<ul>
+		{ sidebar.childrenArray.map(child => <Astro.self sidebar={ child } match={isMatch ? match : []} />) }	
+	</ul>
+</li>
+
+<style>
+	.match {
+		color: red;
+	}
+</style>

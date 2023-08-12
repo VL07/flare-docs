@@ -1,0 +1,154 @@
+---
+import type { GetStaticPaths, GetStaticPathsItem, GetStaticPathsResult } from "astro";
+import type { DocPage, DocPageProps, Sidebar, SidebarItem } from "../types"
+import SidebarItemComponent from "../components/SidebarItemComponent.astro"
+
+export const getStaticPaths: GetStaticPaths = async () => {
+	const pages = await Astro.glob<DocPage>("../../src/content/docs/**/*.md")
+	
+	const sidebar: Sidebar = {}
+
+	const paths: GetStaticPathsResult = pages.map(page => {
+		console.log(page.file)
+		let path: string | undefined = page.file.split("/content/docs")[1]
+		path = path.replaceAll(" ", "-").toLowerCase()
+
+		const fileName = path.split("/").at(-1)
+
+		if (fileName === "index.md") {
+			console.log(path)
+			path = path.split("/").slice(0, -1).join("/")
+			if (path === "/" || path === "") {
+				path = undefined
+			}
+
+			console.log(path)
+		} else {
+			path = path.split(".").slice(0, -1).join(".")
+		}
+
+		if (path?.startsWith("/")) {
+			path = path.slice(1)
+		}
+
+		console.log("path", path || "")
+
+		return {
+			params: { path: path },
+			props: { sidebar: {}, path: path || "", ...page },
+		}
+	})
+
+	console.log("paths done")
+
+	function compare(a: GetStaticPathsItem, b: GetStaticPathsItem) {
+		if (!a.params.path) {
+			return -1
+		}
+		if (!b.params.path) {
+			return 1
+		}
+		console.log(a.params.path, b.params.path, (a.params.path as string).split("/").length, (b.params.path as string).split("/").length, (a.params.path as string).split("/").length - (b.params.path as string).split("/").length)
+		return (a.params.path as string).split("/").length - (b.params.path as string).split("/").length
+	}
+
+	console.log("sorting")
+
+	console.log(paths)
+	paths.sort(compare)
+	console.log(paths)
+
+	console.log("done sorting")
+
+	for (const path of paths) {
+		const pathString = path.params.path as string
+
+		if (pathString === undefined) {
+			sidebar[""] = {
+				title: (path.props?.frontmatter as { title: string }).title,
+				path: "",
+				children: {},
+				position: (path.props?.frontmatter as { position: number }).position,
+				visible: (path.props?.frontmatter as { visible: boolean }).visible,
+				sidebarName: (path.props?.frontmatter as { sidebarName: string }).sidebarName,
+				childrenArray: [],
+				lastPath: ""
+			}
+		} else {
+			let parent: Sidebar = sidebar
+			for (const [index, folder] of pathString.split("/").entries()) {
+				if (index + 1 === pathString.split("/").length) {
+					parent[folder] = {
+						title: (path.props?.frontmatter as { title: string }).title,
+						path: path.params.path as string,
+						children: {},
+						position: (path.props?.frontmatter as { position: number }).position,
+						visible: (path.props?.frontmatter as { visible: boolean }).visible,
+						sidebarName: (path.props?.frontmatter as { sidebarName: string }).sidebarName,
+						childrenArray: [],
+						lastPath: (path.params.path as string).split("/").at(-1) as string
+					}
+					console.log("added", folder, index, parent)
+				} else {
+					if (!parent[folder]) {
+						console.log(folder, index)
+						throw "parent undefined"
+					}
+					parent = parent[folder].children
+				}
+			}
+		}
+
+		if (!path.props || !path.props.sidebar) {
+			throw "expected sidebar"
+		}
+
+		path.props.sidebar = sidebar
+	}
+
+	console.log(paths, sidebar)
+
+	paths.map(prop => console.log("sidebar", prop.props?.sidebar))
+
+	return paths
+}
+
+type Props = DocPageProps
+
+const { Content, frontmatter, sidebar, path } = Astro.props
+
+function orderSidebar(sidebar: SidebarItem): SidebarItem {
+	const customSidebar: SidebarItem[] = []
+
+	if (sidebar.children) {
+		for (const child of Object.values(sidebar.children)) {
+			const childSidebar = orderSidebar(child)
+			childSidebar.childrenArray.sort((a,b) => a.position - b.position)
+
+			if (sidebar.childrenArray.find(s => s.path === childSidebar.path && s.title === childSidebar.title)) {
+				continue
+			}
+			sidebar.childrenArray.push(childSidebar)
+		}
+	}
+
+	return sidebar
+}
+
+const sidebarOrederd: SidebarItem[] = []
+
+for (const sidebarItem of Object.values(sidebar)) {
+	sidebarOrederd.push(orderSidebar(sidebarItem))
+}
+
+sidebarOrederd.sort((a,b) => a.position - b.position)
+
+---
+<ul>
+	{ sidebarOrederd.map(sidebarItem => <SidebarItemComponent sidebar={ sidebarItem } match={path.split("/")}/>) }
+</ul>
+
+<article>
+	<h1>{ frontmatter.title }</h1>
+	<Content/>
+</article>
