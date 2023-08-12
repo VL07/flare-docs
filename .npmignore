@@ -1,1 +1,7 @@
 node_modules
+.astro.config.mjs
+tsconfig.json
+src
+public
+.vscode
+dist

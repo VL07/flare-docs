@@ -1,0 +1,16 @@
+---
+import type { GetStaticPaths } from "astro";
+import { Route, paths } from "./utils/router";
+
+export const getStaticPaths: GetStaticPaths = async () => {
+	return paths
+}
+
+type Props = Route
+const { doc } = Astro.props
+const { Content } = await doc.render()
+
+console.log(doc.data)
+---
+
+<Content />
