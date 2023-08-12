@@ -33,6 +33,8 @@ interface Path extends GetStaticPathsItem {
 function normalizeSlug(slug: string): string {
 	if (slug.endsWith("/index")) {
 		slug = slug.slice(0, -"/index".length)
+	} else if (slug === "index") {
+		return ""
 	}
 
 	return slug
@@ -74,9 +76,10 @@ export const routes: Route[] = getPages()
 
 function getPaths(): Path[] {
 	return routes.map(route => {
+		console.log(route)
 		return {
 			params: {
-				slug: route.fullSlug
+				slug: route.fullSlug === "" ? undefined : route.fullSlug
 			},
 			props: route
 		}

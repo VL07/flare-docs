@@ -12,9 +12,10 @@ export default function flareDocsIntegration(): AstroIntegration {
 		name: "flareDocs",
 		hooks: {
 			"astro:config:setup": async ({ injectRoute }) => {
+				console.log()
 				injectRoute({
-					pattern: "/docs/[...path]",
-					entryPoint: "@vl07/flare-docs/package/docsPage.astro"
+					pattern: "/docs/[...slug]",
+					entryPoint: "@vl07/flare-docs/package/docPage.astro"
 				})
 			}
 		}
