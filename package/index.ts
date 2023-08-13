@@ -1,13 +1,16 @@
 import type { AstroIntegration } from "astro";
 
 export interface FlareDocsOptions {
-	components: {
-		documentationPage: string
+	customPages?: {
+		docPage?: string
 	}
 }
 
-export default function flareDocsIntegration(): AstroIntegration {
-	console.log("here")
+export let options: FlareDocsOptions
+
+export default function flareDocsIntegration(passedOptions: FlareDocsOptions): AstroIntegration {
+	options = passedOptions
+
 	return {
 		name: "flareDocs",
 		hooks: {
@@ -15,7 +18,7 @@ export default function flareDocsIntegration(): AstroIntegration {
 				console.log()
 				injectRoute({
 					pattern: "/docs/[...slug]",
-					entryPoint: "@vl07/flare-docs/package/docPage.astro"
+					entryPoint: passedOptions.customPages?.docPage || "@vl07/flare-docs/package/index.astro"
 				})
 			}
 		}
