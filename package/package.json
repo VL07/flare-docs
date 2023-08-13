@@ -1,0 +1,23 @@
+{
+  "name": "@vl07/flare-docs",
+  "version": "0.0.3",
+  "description": "A documentation framework",
+  "main": "index.ts",
+  "keywords": [
+    "astro-integration"
+  ],
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VL07/flare-docs.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/VL07/flare-docs/issues"
+  },
+  "homepage": "https://github.com/VL07/flare-docs#readme"
+}
