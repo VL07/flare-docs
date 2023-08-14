@@ -2,7 +2,8 @@ import type { AstroIntegration } from "astro";
 
 export interface FlareDocsOptions {
 	customPages?: {
-		docPage?: string
+		docPage?: string,
+		indexPage?: string
 	}
 }
 
@@ -15,7 +16,6 @@ export default function flareDocsIntegration(passedOptions: FlareDocsOptions): A
 		name: "flareDocs",
 		hooks: {
 			"astro:config:setup": async ({ injectRoute }) => {
-				console.log()
 				injectRoute({
 					pattern: "/docs/[...slug]",
 					entryPoint: passedOptions.customPages?.docPage || "@vl07/flare-docs/package/index.astro"

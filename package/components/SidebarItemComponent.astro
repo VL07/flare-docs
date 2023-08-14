@@ -7,11 +7,11 @@ export interface Props {
 const { sidebar, match } = Astro.props
 
 const isMatch = match[0] === sidebar.lastPath
-console.log(match, sidebar.lastPath, isMatch)
 if (isMatch) {
 	match.shift()
 } 
 
+// NOT USED
 ---
 
 <li>

@@ -1,16 +1,32 @@
 ---
 import type { GetStaticPaths } from "astro";
-import { Route, paths } from "./utils/router";
+import { allPaths, groups } from "./utils/router";
+import type { AnyRoute, IndexRoute } from "./utils/router";
+import type { AstroComponentFactory } from "astro/dist/runtime/server";
+import DefaultGroupIndexContent from "./components/DefaultGroupIndexContent.astro";
+import Sidebar from "./components/Sidebar.astro";
 
 export const getStaticPaths: GetStaticPaths = async () => {
-	return paths
+	return allPaths
 }
 
-type Props = Route
-const { doc } = Astro.props
-const { Content } = await doc.render()
+type Props = AnyRoute
+const { doc, isIndex, isEmpty } = Astro.props as Props
 
-console.log(doc.data)
+let Content: AstroComponentFactory | undefined = undefined
+if (doc) {
+	const { Content: content } = await doc.render()
+	Content = content
+}
 ---
 
-<Content />
+<Sidebar routes={ groups } />
+
+{ !isIndex 
+	? Content
+		? <Content />
+		: <></>
+	: isEmpty || !Content
+		? <DefaultGroupIndexContent {...(Astro.props as IndexRoute)} />
+		: <Content />
+}

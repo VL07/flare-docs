@@ -1,0 +1,18 @@
+---
+import type { AnyRoute, IndexRoute } from '../utils/router'
+
+type Props = {
+	route: AnyRoute
+}
+const { route } = Astro.props
+---
+
+<li><a href={ `/docs/${route.fullSlug}` }>{ route.name || "Docs" }</a></li>
+<ul>
+	{ route.children 
+		? (route as IndexRoute).children.map(child => {
+			return <Astro.self route={ child } />
+		})
+		: <></>
+	}
+</ul>

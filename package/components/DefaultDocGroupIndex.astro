@@ -1,0 +1,32 @@
+---
+import type { AstroComponentFactory } from 'astro/dist/runtime/server';
+import type { IndexRoute } from '../utils/router'
+import { groups, indexPaths } from '../utils/router';
+import DefaultGroupIndexContent from './DefaultGroupIndexContent.astro';
+import Sidebar from './Sidebar.astro';
+
+export function getStaticPaths() {
+	console.log(indexPaths)
+	return indexPaths
+}
+
+console.log("HEREopkskopsadko")
+
+type Props = IndexRoute
+const { doc, isEmpty, name } = Astro.props
+
+console.log("isempty", name, isEmpty)
+
+let Content: AstroComponentFactory | undefined = undefined
+if (doc && !isEmpty) {
+	let { Content: content } = await doc.render()
+	Content = content
+}
+---
+
+<Sidebar routes={ groups } />
+
+{ Content
+	? <Content />
+	: <DefaultGroupIndexContent {...Astro.props} />
+}

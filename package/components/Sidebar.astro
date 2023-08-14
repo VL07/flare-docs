@@ -1,0 +1,14 @@
+---
+import type { AnyRoute } from '../utils/router'
+import SidebarItem from './SidebarItem.astro';
+type Props = {
+	routes: AnyRoute[]
+}
+const { routes } = Astro.props
+---
+
+<ul>
+	{ routes.map(route => {
+		return <SidebarItem route={ route } />
+	})}
+</ul>

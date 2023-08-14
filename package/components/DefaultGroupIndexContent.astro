@@ -1,0 +1,16 @@
+---
+import type { IndexRoute } from "../utils/router";
+import DocGroupLink from "./DocGroupLink.astro"
+
+type Props = IndexRoute
+const { children, name } = Astro.props
+---
+
+<h1>{ name }</h1>
+<h2>Content in this group</h2>
+
+<ul>
+	{ children.map(child => {
+		return <DocGroupLink route={ child } />
+	})}
+</ul>
