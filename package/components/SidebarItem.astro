@@ -7,7 +7,7 @@ type Props = {
 const { route } = Astro.props
 ---
 
-<li><a href={ `/docs/${route.fullSlug}` }>{ route.name || "Docs" }</a></li>
+<li><a href={ `/docs/${route.fullSlug}` }>{ (route.doc?.data.title || route.name) || "Docs" }</a></li>
 <ul>
 	{ route.children 
 		? (route as IndexRoute).children.map(child => {
