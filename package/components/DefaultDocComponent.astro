@@ -1,0 +1,26 @@
+---
+import type { Route } from '../utils/router'
+
+type Props = {
+	route: Route
+}
+const { route } = Astro.props
+---
+
+<article>
+	<h1>{ route.doc.data.title || route.name }</h1>
+	{ route.doc.data.description 
+		? <p>{ route.doc.data.description }</p>
+		: <></>
+	}
+	<hr />
+	<slot />
+</article>
+
+<style>
+	hr {
+		width: 100%;
+		border: none;
+		border-bottom: 1px var(--background-secondary) solid;
+	}
+</style>

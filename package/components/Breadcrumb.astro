@@ -1,0 +1,98 @@
+---
+import { groups, type AnyRoute, IndexRoute } from '../utils/router'
+type Props = {
+	route: AnyRoute
+}
+
+interface Path {
+	name: string,
+	url: string
+}
+
+const { route } = Astro.props
+let parentGroup = groups
+const path: Path[] = route.fullSlug.split("/").map(directory => {
+	const page = parentGroup.find(group => group.name === directory)
+	
+	if (!page) { 
+		throw "Missing page"
+	}
+
+	parentGroup = (page as IndexRoute).children || []
+
+	return {
+		name: page.doc?.data.title || page.name as string,
+		url: page.fullSlug
+	}
+})
+
+path.unshift({
+	name: "Documentation",
+	url: "/"
+})
+---
+
+<nav class="breadcrumb">
+	<ul class="breadcrumb-list">
+		{ path.map(page => {
+			const isLast = page === path.at(-1) ? "last" : ""
+			return (
+				<li class="breadcrumb-item">
+					<a href={`/docs/${page.url}`} class={`breadcrumb-item-link ${isLast ? "last" : ""}`}>{ page.name }</a>
+					{ !isLast ? (
+						<svg class="breadcrumb-item-icon"
+							width="16"
+							height="16"
+							viewBox="0 0 24 24"
+							fill="none"
+							xmlns="http://www.w3.org/2000/svg"
+							>
+							<path
+								d="M10.5858 6.34317L12 4.92896L19.0711 12L12 19.0711L10.5858 17.6569L16.2427 12L10.5858 6.34317Z"
+								fill="currentColor"
+							/>
+						</svg>
+					) : <></>}
+				</li>
+			)
+		})}
+	</ul>
+</nav>
+
+<style>
+	.breadcrumb {
+		width: 100%;
+		display: block;
+	}
+
+	.breadcrumb-list {
+		display: flex;
+		list-style: none;
+		padding-left: 0;
+	}
+
+	.breadcrumb-item {
+		display: flex;
+		align-items: center;
+	}
+
+	.breadcrumb-item-link {
+		text-decoration: none;
+		color: var(--text-secondary);
+		font-size: 0.9rem;
+		margin-right: 0.5rem;
+	}
+
+	.breadcrumb-item-link:hover {
+		text-decoration: underline;
+	}
+
+	.breadcrumb-item-link.last {
+		color: var(--text);
+	}
+
+	.breadcrumb-item-icon {
+		margin-right: 0.5rem;
+		color: var(--text-secondary)
+	}
+</style>

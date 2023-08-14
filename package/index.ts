@@ -9,10 +9,10 @@ export interface FlareDocsOptions {
 
 export let options: FlareDocsOptions
 
-export default function flareDocsIntegration(passedOptions: FlareDocsOptions): AstroIntegration {
+export default function flareDocsIntegration(passedOptions: FlareDocsOptions): AstroIntegration[] {
 	options = passedOptions
 
-	return {
+	return [{
 		name: "flareDocs",
 		hooks: {
 			"astro:config:setup": async ({ injectRoute }) => {
@@ -22,5 +22,5 @@ export default function flareDocsIntegration(passedOptions: FlareDocsOptions): A
 				})
 			}
 		}
-	}
+	}]
 }

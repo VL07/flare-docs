@@ -5,10 +5,23 @@ type Props = {
 	route: AnyRoute
 }
 const { route } = Astro.props
+
+const isCurrentPage = (!route.fullSlug ? "/docs" : `/docs/${route.fullSlug}`) === (Astro.url.pathname.endsWith("/") ? Astro.url.pathname.slice(0, -1) : Astro.url.pathname)
+const isOnPath = Astro.url.pathname.startsWith(!route.fullSlug ? "/docs" : `/docs/${route.fullSlug}`)
+const isOpen = isOnPath && route.fullSlug !== Astro.url.pathname
+console.log(`/docs/${route.fullSlug}`, Astro.url.pathname, isCurrentPage, !route.fullSlug ? "/docs" : `/docs/${route.fullSlug}`, isOnPath)
 ---
 
-<li><a href={ `/docs/${route.fullSlug}` }>{ (route.doc?.data.title || route.name) || "Docs" }</a></li>
-<ul>
+<li class={`sidebar-item ${isCurrentPage ? "selected" : ""}`}>
+	<a class="sidebar-link" href={ `/docs/${route.fullSlug}` }>
+		{ isOpen
+			? <svg class={`chevron-icon ${(route.isIndex && route.fullSlug !== "") ? "" : "hidden"}`} width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.34317 7.75732L4.92896 9.17154L12 16.2426L19.0711 9.17157L17.6569 7.75735L12 13.4142L6.34317 7.75732Z" fill="currentColor" /></svg>
+			: <svg class={`chevron-icon ${(route.isIndex && route.fullSlug !== "") ? "" : "hidden"}`} width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.5858 6.34317L12 4.92896L19.0711 12L12 19.0711L10.5858 17.6569L16.2427 12L10.5858 6.34317Z" fill="currentColor" /></svg>
+		}
+		{ (route.doc?.data.title || route.name) || "Docs" }
+	</a>
+</li>
+<ul class={`sidebar-list ${isOnPath ? "open" : ""}`}>
 	{ route.children 
 		? (route as IndexRoute).children.map(child => {
 			return <Astro.self route={ child } />
@@ -16,3 +29,48 @@ const { route } = Astro.props
 		: <></>
 	}
 </ul>
+
+<style>
+	.sidebar-item {
+		list-style: none;
+		margin: 0.1rem 0;
+		padding: 0.25rem 0.5rem;
+		border-radius: 0.25rem;
+	}
+
+	.selected {
+		background-color: var(--background-secondary);
+		font-weight: bold;
+	}
+
+	.sidebar-item:hover {
+		background-color: var(--background-secondary);
+	}
+
+	.sidebar-link {
+		text-decoration: none;
+		color: var(--text);
+		width: 100%;
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+	}
+
+	.sidebar-list {
+		padding-left: 1rem;
+		max-height: 0;
+		overflow: hidden;
+	}
+
+	.sidebar-list.open {
+		max-height: fit-content;
+	}
+
+	.chevron-icon {
+
+	}
+
+	.chevron-icon.hidden {
+		visibility: hidden;
+	}
+</style>

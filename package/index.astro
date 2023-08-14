@@ -1,17 +1,21 @@
 ---
 import type { GetStaticPaths } from "astro";
 import { allPaths, groups } from "./utils/router";
-import type { AnyRoute, IndexRoute } from "./utils/router";
+import type { AnyRoute, IndexRoute, Route } from "./utils/router";
 import type { AstroComponentFactory } from "astro/dist/runtime/server";
 import DefaultGroupIndexContent from "./components/DefaultGroupIndexContent.astro";
 import Sidebar from "./components/Sidebar.astro";
+import Breadcrumb from "./components/Breadcrumb.astro";
+import DefaultDocComponent from "./components/DefaultDocComponent.astro";
+import Header from "./components/Header.astro";
+
 
 export const getStaticPaths: GetStaticPaths = async () => {
 	return allPaths
 }
 
 type Props = AnyRoute
-const { doc, isIndex, isEmpty } = Astro.props as Props
+const { doc, isIndex, isEmpty, name } = Astro.props as Props
 
 let Content: AstroComponentFactory | undefined = undefined
 if (doc) {
@@ -20,13 +24,55 @@ if (doc) {
 }
 ---
 
-<Sidebar routes={ groups } />
+<html>
+	<head>
+		<title>{ doc?.data.title || name }</title>
+	</head>
+	<body>
+		<Header />
+		<div class="page-container">
+			<Sidebar routes={ groups } />
 
-{ !isIndex 
-	? Content
-		? <Content />
-		: <></>
-	: isEmpty || !Content
-		? <DefaultGroupIndexContent {...(Astro.props as IndexRoute)} />
-		: <Content />
-}
+			<div>
+				<Breadcrumb route={ Astro.props } />
+				<main>
+					{ !isIndex 
+						? Content
+							? <DefaultDocComponent route={ Astro.props as Route }><Content /></DefaultDocComponent>
+							: <></>
+						: isEmpty || !Content
+							? <DefaultGroupIndexContent {...(Astro.props as IndexRoute)} />
+							: <Content />
+					}
+				</main>
+			</div>
+		</div>
+	</body>
+</html>
+
+<style>
+	.page-container {
+		width: 100vw;
+		min-height: 100vh;
+		display: grid;
+		grid-template-columns: 15rem auto;
+		gap: 2rem;
+	}
+</style>
+
+<style is:global>
+	:root {
+		--text: #000000;
+		--text-secondary: #6d6d6d;
+		--background: #FFFFFF;
+		--background-secondary: #f2f1f5;
+		--primary: #b5aff0;
+		--secondary: #deb1ad;
+	}
+
+	body {
+		padding: 0;
+		margin: 0;
+		font-family: sans-serif;
+	}
+</style>

@@ -7,8 +7,22 @@ type Props = {
 const { routes } = Astro.props
 ---
 
-<ul>
-	{ routes.map(route => {
-		return <SidebarItem route={ route } />
-	})}
-</ul>
+<nav class="sidebar">
+	<ul class="sidebar-list">
+		{ routes.map(route => {
+			return <SidebarItem route={ route } />
+		})}
+	</ul>
+</nav>
+
+<style>
+	.sidebar {
+		display: inline-block;
+		padding: 0 1rem;
+		border-right: 1px var(--background-secondary) solid;
+	}
+
+	.sidebar-list {
+		padding-left: 0;
+	}
+</style>
