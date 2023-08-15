@@ -1,0 +1,73 @@
+---
+import type { MarkdownHeading } from 'astro';
+import type { AnyRoute } from '../utils/router';
+type Props = {
+	route: AnyRoute
+}
+
+const { route } = Astro.props
+
+let headings: MarkdownHeading[] = []
+if (route.doc) {
+	headings = (await route.doc.render()).headings
+}
+---
+
+<div class="sidebar">
+	<p class="title">On this page</p>
+	<nav class="sidebar-navigation">
+		<ul class="sidebar-list">
+			{ headings.map(heading => (
+				<li class="sidebar-list-item"><a class={`sidebar-list-item-link depth-${heading.depth}`} href={`#${heading.slug}`}>{ heading.text }</a></li>
+			))}
+		</ul>
+	</nav>
+</div>
+
+<style>
+	.sidebar {
+	}
+
+	.title {
+		font-weight: bold;
+		font-size: 1.1rem;
+	}
+
+	.sidebar-navigation {
+		
+	}
+
+	.sidebar-list {
+		padding-left: 0;
+	}
+
+	.sidebar-list-item {
+		list-style: none;
+	}
+
+	.sidebar-list-item-link {
+		text-decoration: none;
+		color: var(--text-secondary);
+		font-size: 0.9rem;
+	}
+
+	.sidebar-list-item-link:hover {
+		text-decoration: underline;
+	}
+
+	.depth-2 {
+		margin-left: 0rem;
+	}
+
+	.depth-3 {
+		margin-left: 0.5rem;
+	}
+
+	.depth-4 {
+		margin-left: 1rem;
+	}
+
+	.depth-5 {
+		margin-left: 1.5rem;
+	}
+</style>

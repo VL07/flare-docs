@@ -8,6 +8,7 @@ import Sidebar from "./components/Sidebar.astro";
 import Breadcrumb from "./components/Breadcrumb.astro";
 import DefaultDocComponent from "./components/DefaultDocComponent.astro";
 import Header from "./components/Header.astro";
+import RightSidebar from "./components/rightSidebar.astro";
 
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -46,6 +47,8 @@ if (doc) {
 					}
 				</main>
 			</div>
+
+			<RightSidebar route={Astro.props} />
 		</div>
 	</body>
 </html>
@@ -53,9 +56,9 @@ if (doc) {
 <style>
 	.page-container {
 		width: 100vw;
-		min-height: 100vh;
+		min-height: calc(100vh - );
 		display: grid;
-		grid-template-columns: 15rem auto;
+		grid-template-columns: 15rem auto 15rem;
 		gap: 2rem;
 	}
 </style>
