@@ -7,9 +7,9 @@ export interface FlareDocsOptions {
 	}
 }
 
-export let options: FlareDocsOptions
+export let options: FlareDocsOptions | undefined
 
-export default function flareDocsIntegration(passedOptions: FlareDocsOptions): AstroIntegration[] {
+export default function flareDocsIntegration(passedOptions?: FlareDocsOptions): AstroIntegration[] {
 	options = passedOptions
 
 	return [{
@@ -18,7 +18,7 @@ export default function flareDocsIntegration(passedOptions: FlareDocsOptions): A
 			"astro:config:setup": async ({ injectRoute }) => {
 				injectRoute({
 					pattern: "/docs/[...slug]",
-					entryPoint: passedOptions.customPages?.docPage || "@vl07/flare-docs/package/index.astro"
+					entryPoint: passedOptions?.customPages?.docPage || "@vl07/flare-docs/package/index.astro"
 				})
 			}
 		}
