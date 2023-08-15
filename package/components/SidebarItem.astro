@@ -36,24 +36,31 @@ console.log(`/docs/${route.fullSlug}`, Astro.url.pathname, isCurrentPage, !route
 		margin: 0.1rem 0;
 		padding: 0.25rem 0.5rem;
 		border-radius: 0.25rem;
+		transition: all var(--transition);
 	}
 
 	.selected {
-		background-color: var(--background-secondary);
+		background-color: var(--primary);
 		font-weight: bold;
+		text: var(--text);
 	}
 
-	.sidebar-item:hover {
+	.sidebar-item:not(.selected):hover {
 		background-color: var(--background-secondary);
+		text: var(--text);
 	}
 
 	.sidebar-link {
 		text-decoration: none;
-		color: var(--text);
 		width: 100%;
 		display: flex;
 		align-items: center;
+		color: var(--text-secondary);
 		gap: 0.25rem;
+	}
+
+	.sidebar-item.selected > .sidebar-link {
+		color: var(--text);
 	}
 
 	.sidebar-list {

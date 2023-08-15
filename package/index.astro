@@ -8,7 +8,7 @@ import Sidebar from "./components/Sidebar.astro";
 import Breadcrumb from "./components/Breadcrumb.astro";
 import DefaultDocComponent from "./components/DefaultDocComponent.astro";
 import Header from "./components/Header.astro";
-import RightSidebar from "./components/rightSidebar.astro";
+import RightSidebar from "./components/RightSidebar.astro";
 
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -28,13 +28,18 @@ if (doc) {
 <html>
 	<head>
 		<title>{ doc?.data.title || name }</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Roboto:ital,wght@0,400;0,700;1,900&display=swap" rel="stylesheet">
 	</head>
 	<body>
 		<Header />
 		<div class="page-container">
 			<Sidebar routes={ groups } />
+			<div></div>
 
-			<div>
+			<div class="content">
 				<Breadcrumb route={ Astro.props } />
 				<main>
 					{ !isIndex 
@@ -55,27 +60,43 @@ if (doc) {
 
 <style>
 	.page-container {
+		position: relative;
 		width: 100vw;
-		min-height: calc(100vh - );
+		min-height: calc(100vh - 64px);
 		display: grid;
-		grid-template-columns: 15rem auto 15rem;
-		gap: 2rem;
+		grid-template-columns: 256px auto 15rem;
+		gap: 32px;
+	}
+
+	.content {
+		padding-top: 16px;
 	}
 </style>
 
 <style is:global>
 	:root {
-		--text: #000000;
-		--text-secondary: #6d6d6d;
-		--background: #FFFFFF;
-		--background-secondary: #f2f1f5;
-		--primary: #b5aff0;
-		--secondary: #deb1ad;
+		--text: #ffffff;
+		--text-secondary: #c9c9c9;
+		--background: #151619;
+		--background-secondary: #202127;
+		--primary: #914cd4;
+		--secondary: #242424;
+		--border: #373739;
+		--background-transparent: #ffffff15;
+		--blur: blur(10px);
+		--border-radius: 8px;
+		--transition: 0.1s ease-in-out;
 	}
 
 	body {
 		padding: 0;
 		margin: 0;
-		font-family: sans-serif;
+		font-family: 'Inter', sans-serif;
+		background-color: var(--background);
+		color: var(--text);
+	}
+
+	h1, h2, h3, h4, h5, h6 {
+		font-family: 'Roboto', sans-serif;
 	}
 </style>

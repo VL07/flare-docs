@@ -8,6 +8,7 @@ const { routes } = Astro.props
 ---
 
 <nav class="sidebar">
+
 	<ul class="sidebar-list">
 		{ routes.map(route => {
 			return <SidebarItem route={ route } />
@@ -18,8 +19,21 @@ const { routes } = Astro.props
 <style>
 	.sidebar {
 		display: inline-block;
-		padding: 0 1rem;
-		border-right: 1px var(--background-secondary) solid;
+		padding: 0 16px;
+		border-right: 1px var(--border) solid;
+		background-color: var(--background);
+		background-color: var(--background-transparent);
+		backdrop-filter: blur(var(--blur));
+		-webkit-backdrop-filter: blur(var(--blur));
+		position: fixed;
+		height: calc(100vh - 64px);
+		width: 224px;
+	}
+
+	.title {
+		font-family: "roboto", sans-serif;
+		font-weight: bold;
+		font-size: 20px;
 	}
 
 	.sidebar-list {

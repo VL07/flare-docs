@@ -46,9 +46,14 @@
 		justify-content: space-between;
 		padding: 1rem 2rem;
 		box-sizing: border-box;
-		background-color: white;
+		background-color: var(--background-transparent);
+		backdrop-filter: var(--blur);
+		-webkit-backdrop-filter: var(--blur);
 		border-bottom: 1px var(--background-secondary) solid;
-		height: 4rem;
+		height: 64px;
+		z-index: 10;
+		box-sizing: border-box;
+		border-bottom: 1px solid var(--border);
 	}
 
 	.header-section {
@@ -81,8 +86,9 @@
 		text-decoration: none;
 		font-weight: bold;
 		font-size: x-large;
-		color: var(--text);
-		line-height: 1rem;
+		color: var(--primary);
+		line-height: normal;
+		font-family: 'Roboto', sans-serif;
 	}
 
 	.search-form {

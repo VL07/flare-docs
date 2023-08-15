@@ -63,12 +63,20 @@ path.unshift({
 	.breadcrumb {
 		width: 100%;
 		display: block;
+		background-color: var(--background-transparent);
+		backdrop-filter: var(--blur);
+		-webkit-backdrop-filter: var(--blur);
+		padding: 8px 16px;
+		box-sizing: border-box;
+		border-radius: var(--border-radius);
+		border: 1px solid var(--border);
 	}
 
 	.breadcrumb-list {
 		display: flex;
 		list-style: none;
 		padding-left: 0;
+		margin: 0;
 	}
 
 	.breadcrumb-item {
@@ -80,11 +88,16 @@ path.unshift({
 		text-decoration: none;
 		color: var(--text-secondary);
 		font-size: 0.9rem;
-		margin-right: 0.5rem;
+		margin-right: 8px;
+		border-radius: var(--border-radius);
+		padding: 2px 8px;
+		transition: all var(--transition);
 	}
 
 	.breadcrumb-item-link:hover {
-		text-decoration: underline;
+		background-color: var(--primary);
+		color: var(--text);
+		text-decoration: none;
 	}
 
 	.breadcrumb-item-link.last {
@@ -92,7 +105,7 @@ path.unshift({
 	}
 
 	.breadcrumb-item-icon {
-		margin-right: 0.5rem;
+		margin-right: 8px;
 		color: var(--text-secondary)
 	}
 </style>
