@@ -18,7 +18,7 @@ export default function flareDocsIntegration(passedOptions?: FlareDocsOptions): 
 			"astro:config:setup": async ({ injectRoute }) => {
 				injectRoute({
 					pattern: "/docs/[...slug]",
-					entryPoint: passedOptions?.customPages?.docPage || "@vl07/flare-docs/package/index.astro"
+					entryPoint: passedOptions?.customPages?.docPage || "@vl07/flare-docs/index.astro"
 				})
 			}
 		}
